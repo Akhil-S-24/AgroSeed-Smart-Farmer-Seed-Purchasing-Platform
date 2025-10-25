@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login / Signup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="{{ url_for('static', filename='farmer_seeds.png') }}" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <style>
+        body {
+            background-image: url('https://images.pexels.com/photos/162870/rye-cereals-wheat-nature-162870.jpeg?cs=srgb&dl=pexels-pixabay-162870.jpg&fm=jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-4 bg-cover bg-center bg-no-repeat">
+
+  <div class="w-full max-w-md bg-white bg-opacity-65 backdrop-blur-sm shadow-xl rounded-lg p-8">
+    <h2 class="text-2xl font-bold text-center mb-6" id="form-title">Login</h2>
+
+    <form id="auth-form" class="space-y-4">
+      <input type="hidden" id="form-type" value="login">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" id="username"  autocomplete="off" class="mt-1 w-full border border-gray-300 rounded px-3 py-2" required>
+      </div>
+
+      <div id="signup-fields" class="hidden">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Mobile Number</label>
+          <input type="text" id="mobile" autocomplete="off" maxlength="10" minlength="10"  class="mt-1 w-full border border-gray-300 rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" id="email" autocomplete="off"   class="mt-1 w-full border border-gray-300 rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Address</label>
+          <input type="text" id="address" autocomplete="off" class="mt-1 w-full border border-gray-300 rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">User Type</label>
+          <select id="user_type" class="mt-1 w-full border border-gray-300 rounded px-3 py-2">
+            <option value="farmer">Farmer</option>
+            <option value="vendor">Vendor</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" id="password" class="mt-1 w-full border border-gray-300 rounded px-3 py-2" required>
+      </div>
+
+      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
+        Submit
+      </button>
+    </form>
+
+    <p class="text-sm text-center mt-4">
+      <span id="toggle-text">Don't have an account?</span>
+      <a href="#" id="toggle-link" class="text-green-600 hover:underline">Sign up</a>
+    </p>
+
+    <p id="message" class="text-center text-sm text-red-600 mt-4"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('auth-form');
+    const formType = document.getElementById('form-type');
+    const toggleLink = document.getElementById('toggle-link');
+    const toggleText = document.getElementById('toggle-text');
+    const formTitle = document.getElementById('form-title');
+    const signupFields = document.getElementById('signup-fields');
+    const message = document.getElementById('message');
+
+    toggleLink.addEventListener('click', () => {
+      const isLogin = formType.value === 'login';
+      formType.value = isLogin ? 'signup' : 'login';
+      formTitle.textContent = isLogin ? 'Signup' : 'Login';
+      toggleText.textContent = isLogin ? 'Already have an account?' : "Don't have an account?";
+      toggleLink.textContent = isLogin ? 'Login' : 'Sign up';
+      signupFields.classList.toggle('hidden');
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const data = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
+      };
+
+      if (formType.value === 'signup') {
+        data.email = document.getElementById('email').value;
+        data.mobile = document.getElementById('mobile').value;
+        data.address = document.getElementById('address').value;
+        data.user_type = document.getElementById('user_type').value;
+      }
+
+      fetch(formType.value === 'login' ? '/login' : '/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => {
+        message.textContent = response.message;
+        message.classList.toggle('text-green-600', response.success);
+        message.classList.toggle('text-red-600', !response.success);
+
+        if (response.success && formType.value === 'login') {
+          setTimeout(() => {
+            window.location.href = response.redirect;
+          }, 1000);
+        }
+        if (!response.success && formType.value === 'login') {
+          setTimeout(() => {
+            window.location.href = response.redirect;
+          }, 1000);
+        }
+
+        if (response.success && formType.value === 'signup') {
+          formType.value = 'login';
+          formTitle.textContent = 'Login';
+          toggleText.textContent = "Don't have an account?";
+          toggleLink.textContent = "Sign up";
+          signupFields.classList.add('hidden');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        message.textContent = "Something went wrong. Please Read README.md";
+      });
+    });
+  </script>
+</body>
+</html>
