@@ -28,6 +28,39 @@ Welcome to the Seed Selling Platform, a digital marketplace where farmers can bu
 - **Backend**: Flask , Python
 - **Database**: MongoDB
 
+  ## code infromation
+  🌾 Main Points of the Project
+
+Online Seed Marketplace – Farmers can browse and buy seeds from verified vendors easily.
+
+User Roles – Supports multiple users: Farmer, Vendor, and Company Admin.
+
+Vendor Verification System – Company verifies vendors before allowing seed listings.
+
+Secure Authentication – Login and signup with session-based user access.
+
+Seed Management – Vendors can add, edit, delete, and manage seed listings with images and details.
+
+Image & Video Integration – Each seed listing supports images and video links for better product visibility.
+
+Payment Gateway (Razorpay) – Farmers can pay securely for seeds online.
+
+Booking & Order Tracking – Farmers can track their purchases and order status in real-time.
+
+Stock Control – Quantity automatically updates after successful purchases.
+
+Rating System – Farmers can rate seeds after order completion to help others choose better products.
+
+Email Notifications – Vendors receive email updates on account approval or rejection.
+
+MongoDB Database – All data (users, seeds, payments, bookings, and ratings) stored securely in the cloud.
+
+Flask Backend – Built using Python Flask, offering fast and scalable API-driven operations.
+
+GridFS File Storage – Manages and serves images efficiently from MongoDB.
+
+Responsive Dashboard – Separate dashboards for farmers, vendors, and company admin.
+
 
 Setup and Run
 
@@ -51,5 +84,6 @@ Setup and Run
 For Guidence visit : https://www.freecodecamp.org/news/get-started-with-mongodb-atlas/
 
 --> client = MongoClient("mongodb+srv://{Your Id}:{Your password}@cluster0.bdy42wh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+
 
 Don't Miss to add your credentials here**
