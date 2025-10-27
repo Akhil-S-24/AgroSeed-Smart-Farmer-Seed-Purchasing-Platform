@@ -1,0 +1,7 @@
+Flask==2.2.3
+pymongo==4.1.1
+boto3==1.24.14  # Optional: If you're using AWS for image hosting (e.g., S3)
+werkzeug==2.2.3
+gunicorn==20.1.0
+python-dotenv==0.19.2
+flask-cors==3.1.1  # If you plan to handle cross-origin requests (CORS)
